@@ -3,6 +3,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
@@ -24,9 +27,9 @@ public class App extends Application{
                   final String oldvalue, final String newvalue) 
           {
               window.setTitle(newvalue);
+              
           }
       });
-
       webView.prefHeightProperty().bind(window.heightProperty());
       webView.prefWidthProperty().bind(window.widthProperty());
       String homePageUrl = "www.google.com";
@@ -41,12 +44,29 @@ public class App extends Application{
       TilePane progreesTile = new TilePane();
       progreesTile.getChildren().add(progress);
 
+      BrowHistory history = new BrowHistory(webView);
+      navigationBar.getChildren().addAll(history);
+
       VBox root = new VBox(5);
       root.getChildren().addAll(navigationBar,progreesTile,webView);
       
       Scene scene = new Scene(root,600,600);
-
+      scene.setOnKeyPressed((KeyEvent event) -> {
+          if(event.getCode() == KeyCode.F12){
+            showText("Source of " + webEngine.getTitle(), window, (String) webEngine.executeScript("document.documentElement.outerHTML"));
+          }
+      });
       window.setScene(scene);
       window.show();
+    }
+
+    public void showText(String title,Stage window,String text){
+        TextArea root = new TextArea(text);
+        Scene secondScene = new Scene(root,600,400);
+        Stage secondWindow = new Stage();
+        secondWindow.setTitle(title);
+        secondWindow.setScene(secondScene);
+        secondWindow.initOwner(window);
+        secondWindow.show();
     }
 }

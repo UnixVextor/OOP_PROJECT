@@ -4,9 +4,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -34,17 +32,19 @@ public class NavigationBar extends HBox{
         // set spacing
         this.setSpacing(4);
         WebEngine webEngine = webView.getEngine();
-
         TextField pageUrl = new TextField();
 
         Button btBack = new Button("Back");
+        btBack.setDisable(true);
         Button btReload = new Button("Reload");
         Button btForward = new Button("Forward");
+        btForward.setDisable(true);
         Button btZoomIn = new Button("Zoom In");
         Button btZoomOut = new Button("Zoom out");
         Button btZoomNormal = new Button("Zoom Normal");
-        Button btsrc = new Button("src");
 
+
+        // Set on Action each button or set Event
         HBox.setHgrow(pageUrl, Priority.ALWAYS);
             
         pageUrl.setOnAction(new EventHandler<ActionEvent>() {
@@ -52,15 +52,17 @@ public class NavigationBar extends HBox{
              public void handle(ActionEvent event){
                  boolean isHttp = pageUrl.getText().indexOf("http://") != -1?true:false;
                  boolean isHttps = pageUrl.getText().indexOf("https://") != -1?true:false;
-                 if(isHttp || isHttps){
+                 boolean hasCom = pageUrl.getText().indexOf(".com") != -1 ? true:false;
+                 if((isHttp || isHttps) && hasCom){
                      webEngine.load(pageUrl.getText());
-                 }else webEngine.load("http://"+pageUrl.getText());
+                 }else if((!isHttp || !isHttps) && hasCom) webEngine.load("http://"+pageUrl.getText());
+                 else webEngine.load("https://www.google.com/search?q=" + pageUrl.getText()); 
              }
          });
              
          webEngine.getLoadWorker().stateProperty().addListener((obs,oldvalue,newvalue) -> {
              if(newvalue == Worker.State.SUCCEEDED){
-               System.out.println("page has been loaded");
+               //System.out.println("page has been loaded");
              }else if(newvalue == Worker.State.FAILED){
                webEngine.loadContent(HTML_ERROR);
              }
@@ -115,26 +117,41 @@ public class NavigationBar extends HBox{
             }
         });
         
-        btsrc.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event){
-               showText("Source of " + webEngine.getTitle(), window, (String) webEngine.executeScript("document.documentElement.outerHTML"));
+        webEngine.getHistory().currentIndexProperty().addListener(new ChangeListener<Number>()
+        {
+            public void changed(ObservableValue<? extends Number> ov,
+                    final Number oldvalue, final Number newvalue) 
+            {
+                int currentIndex = newvalue.intValue();
+                System.out.print(currentIndex + " "); 
+                System.out.println(webEngine.getHistory().getEntries().size());
+                if (currentIndex <= 0) 
+                {
+                    btBack.setDisable(true);
+                } 
+                else
+                {
+                    btBack.setDisable(false);
+                }
+                 
+                if (currentIndex == webEngine.getHistory().getEntries().size() - 1) 
+                {
+                    btForward.setDisable(true);
+                } 
+                else
+                {
+                    btForward.setDisable(false);
+                }
             }
-        });
-        
-        this.getChildren().addAll(btBack,btReload,btForward,pageUrl,btZoomIn,btZoomNormal,btZoomOut,btsrc);
+        });     
+ 
+
+        // add all element to pane
+        this.getChildren().addAll(btBack,btReload,btForward,pageUrl,btZoomIn,btZoomNormal,btZoomOut);
         if(goToHomePage){
             webEngine.load("http://"+homePagaeUrl);
         }
         
     }
 
-    public void showText(String title,Stage window,String text){
-        TextArea root = new TextArea(text);
-        Scene secondScene = new Scene(root,600,400);
-        Stage secondWindow = new Stage();
-        secondWindow.setTitle(title);
-        secondWindow.setScene(secondScene);
-        secondWindow.initOwner(window);
-        secondWindow.show();
-    }
 }
