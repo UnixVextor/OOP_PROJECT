@@ -14,6 +14,7 @@ public class BrowHistory extends HBox{
     public BrowHistory(WebView webView){
         WebHistory history = webView.getEngine().getHistory();
         Label label = new Label("History : ");
+        label.setStyle("-fx-text-fill: #FF8C32;-fx-font-weight: bold;");
 
         ComboBox<Entry> historyList = new ComboBox<>();
         historyList.setPrefWidth(250);

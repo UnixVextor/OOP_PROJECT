@@ -4,6 +4,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.TilePane;
@@ -35,9 +36,10 @@ public class App extends Application{
       String homePageUrl = "www.google.com";
 
       NavigationBar navigationBar = new NavigationBar(webView, homePageUrl, true,window);
+      navigationBar.setStyle("-fx-padding:10 0 5 0;-fx-background-color: #06113C;");
 
       ProgressBar progress = new ProgressBar(0);
-      progress.setStyle("-fx-accent: #00FF00;");
+      progress.setStyle("-fx-text-box-border: #06113C;-fx-control-inner-background: #06113C;-fx-accent: #FF8C32;-fx-background-color: #06113C;");
       progress.progressProperty().bind(webEngine.getLoadWorker().progressProperty());
       progress.prefWidthProperty().bind(window.widthProperty());
       progress.setPrefHeight(12);
@@ -47,15 +49,16 @@ public class App extends Application{
       BrowHistory history = new BrowHistory(webView);
       navigationBar.getChildren().addAll(history);
 
-      VBox root = new VBox(5);
+      VBox root = new VBox();
       root.getChildren().addAll(navigationBar,progreesTile,webView);
       
-      Scene scene = new Scene(root,600,600);
+      Scene scene = new Scene(root,900,600);
       scene.setOnKeyPressed((KeyEvent event) -> {
           if(event.getCode() == KeyCode.F12){
             showText("Source of " + webEngine.getTitle(), window, (String) webEngine.executeScript("document.documentElement.outerHTML"));
           }
       });
+      window.getIcons().add(new Image("image/Star.png"));
       window.setScene(scene);
       window.show();
     }
