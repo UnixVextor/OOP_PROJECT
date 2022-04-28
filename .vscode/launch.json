@@ -6,11 +6,19 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch App",
+            "request": "launch",
+            "mainClass": "App",
+            "projectName": "OOP_PROJECT_b98f7f85",
+            "vmArgs": "--module-path \"C:/Program Files/Java/javafx-sdk-17.0.2/lib\" --add-modules javafx.controls,javafx.fxml,javafx.web"
+        },
+        {
+            "type": "java",
             "name": "Launch Inspacetor",
             "request": "launch",
             "mainClass": "Inspacetor",
             "projectName": "OOP_PROJECT_5f598603",
-            "vmArgs": "--module-path \"C:/Program Files/javafx-sdk-17.0.2/lib\" --add-modules javafx.controls,javafx.fxml,javafx.web"
+            "vmArgs": "--module-path \"C:/Program Files/Java/javafx-sdk-17.0.2/lib\" --add-modules javafx.controls,javafx.fxml,javafx.web"
         },
         {
             "type": "java",
@@ -18,7 +26,7 @@
             "request": "launch",
             "mainClass": "Test",
             "projectName": "OOP_PROJECT_5f598603",
-            "vmArgs": "--module-path \"C:/Program Files/javafx-sdk-17.0.2/lib\" --add-modules javafx.controls,javafx.fxml,javafx.web"
+            "vmArgs": "--module-path \"C:/Program Files/Java/javafx-sdk-17.0.2/lib\" --add-modules javafx.controls,javafx.fxml,javafx.web"
         },
         {
             "type": "java",
@@ -32,7 +40,7 @@
             "request": "launch",
             "mainClass": "App",
             "projectName": "OOP_PROJECT_5f598603",
-            "vmArgs": "--module-path \"C:/Program Files/javafx-sdk-17.0.2/lib\" --add-modules javafx.controls,javafx.fxml,javafx.web"
+            "vmArgs": "--module-path \"C:/Program Files/Java/javafx-sdk-17.0.2/lib\" --add-modules javafx.controls,javafx.fxml,javafx.web"
         }
     ]
 }
